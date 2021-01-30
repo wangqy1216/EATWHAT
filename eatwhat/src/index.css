@@ -2,7 +2,9 @@
 @import './styles/TopBar.css';
 @import './styles/Main.css';
 @import '~antd/dist/antd.css';
-@import './styles/TopBar.css';
+@import "./styles/CustomerCheckin.css";
+@import "./styles/AttendantLogin.css";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

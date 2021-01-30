@@ -6,6 +6,9 @@ import React, {Component} from 'react';
 import Home from "./Home";
 import CustomerCheckin from "./CustomerCheckin";
 import Attendant from "./Attendant";
+import ChooseMeal from "./ChooseMeal";
+import AttendantLogin from "./AttendantLogin";
+import Customer from "./Customer";
 
 class Main extends Component {
 
@@ -15,12 +18,11 @@ class Main extends Component {
             <div className="main">
                 {/*<Input placeholder="Basic usage" />*/}
                 <Switch>
-
-
                     <Route path = "/home" component={Home} />
-                    <Route path = "/customer" component={CustomerCheckin}/>
+                    <Route path = "/customer" component={Customer}/>
                     <Route path = "/attendant" component={Attendant}/>
 
+                    <Redirect exact from="/" to="/home" />
                 </Switch>
 
 
