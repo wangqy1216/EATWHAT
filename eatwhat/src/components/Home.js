@@ -32,7 +32,7 @@ class Home extends Component {
                             hoverable
                             cover={<img alt="customer"  width="100px" height="250" src={customer}/>}
                         >
-                            <Meta title="Customer" description="If you are a customer, click here" />
+                            <Meta title="CustomerCheckin" description="If you are a customer, click here" />
                         </Card></Link>
                     </Col>
                     <Col span={5}>
