@@ -4,6 +4,8 @@ import { Input } from 'antd';
 import React, {Component} from 'react';
 // import Login from "./Login";
 import Home from "./Home";
+import Customer from "./Customer";
+import Attendant from "./Attendant";
 
 class Main extends Component {
 
@@ -16,6 +18,8 @@ class Main extends Component {
 
 
                     <Route path = "/home" component={Home} />
+                    <Route path = "/customer" component={Customer}/>
+                    <Route path = "/attendant" component={Attendant}/>
 
                 </Switch>
 
