@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import SeatPicker from 'react-seat-picker';
-import {Button, Row, Col, Card} from "antd";
+import {Button, Row, Col, Card, message} from "antd";
 import {Link} from "react-router-dom";
 import customer from "../assets/images/customer-card.jpg";
 import attendant from "../assets/images/attendant-card.jpg";
+import {BASE_URL} from "../constants";
 class AttendantPanel extends Component {
     state = {
         loading: false
@@ -66,19 +67,41 @@ class AttendantPanel extends Component {
             }
         );
     };
+
+    notify = () =>{
+        const cors = 'https://cors-anywhere.herokuapp.com/';
+        let url = cors+ BASE_URL +"/flights/?fid=";
+        let flightID = localStorage.getItem("FlightID");
+        fetch(url.concat(flightID), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if(!response.ok) throw new Error(response.status);
+            else return message.success("Notify succeed! ");;
+        })
+        .catch((err) => {
+            console.error(err);
+            // message.error('NO Orders');
+        });
+    }
+
     render() {
         const rows = [
             [
 
-                { id: 1, number: "A1", isSelected: true, tooltip: "Reserved by you" },
-                { id: 2, number: "B1", tooltip: "Cost: 15$" },
+                { id: 1, number: "A1", isSelected: true, tooltip: "Muslim" },
+                { id: 2, number: "B1", isSelected: true, tooltip: "LowFat" },
                 null,
                 {
                     id: 3,
                     number: "C1",
                     // isReserved: true,
                     orientation: "east",
-                    tooltip: "Reserved by Rogger"
+
                 },
                 { id: 4, number: "D1" },
                 { id: 5, number: "E1", orientation: "west" }
@@ -100,7 +123,8 @@ class AttendantPanel extends Component {
                 { id: 12, number: "B3" },
                 null,
                 { id: 13, number: "C3", orientation: "east" },
-                { id: 14, number: "D3",},
+                { id: 14, number: "D3",isSelected: true,
+                    tooltip: "Baby"},
                 { id: 15, number: "E3", orientation: "west" }
             ],
             [
@@ -126,20 +150,24 @@ class AttendantPanel extends Component {
         const { loading } = this.state;
         rows[1][0].tooltip = "Change"
         console.log(rows[1]);
+
+        const {FlightID}=localStorage;
         return (
             <div>
                 <h1>Admin Panel</h1>
-                <div style={{ marginTop: "100px"}}>
-                    <Row gutter={55} align = "center"
-                    >
-                        <Col span={3} >
-                            <div style={paddingStyle}> 1 -------------</div>
-                            <div style={paddingStyle}> 2 -------------</div>
-                            <div style={paddingStyle}> 3 -------------</div>
-                            <div style={paddingStyle}> 4 -------------</div>
-                            <div style={paddingStyle}> 5 -------------</div>
+                <h2>Flight Number: {FlightID} </h2>
+                <Button type="primary" htmlType="submit" onClick={this.notify}>Notify All</Button>
+                <h5>As an attendant, you can notify all passengers to make a special meal.</h5>
+                <div style={{ marginTop: "50px"}}>
+                    <Row gutter={18} align = "center">
+                        <Col span={12} >
+                            <div style={paddingStyle}> 1 ---------</div>
+                            <div style={paddingStyle}> 2 ---------</div>
+                            <div style={paddingStyle}> 3 ---------</div>
+                            <div style={paddingStyle}> 4 ---------</div>
+                            <div style={paddingStyle}> 5 ---------</div>
                         </Col>
-                        <Col span={3} >
+                        <Col span={12} >
                             <SeatPicker
                                 addSeatCallback={this.addSeatCallback}
                                 removeSeatCallback={this.removeSeatCallback}
