@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import { Form, Input, Button} from 'antd';
+import {Form, Input, Button, InputNumber} from 'antd';
 import {Link} from "react-router-dom";
+import FlightIcon from '@material-ui/icons/Flight';
+import {PhoneOutlined} from "@ant-design/icons";
 
 class CustomerCheckin extends Component {
     render() {
@@ -42,19 +44,6 @@ class CustomerCheckin extends Component {
                 className="checkIn"
             >
                 <Form.Item
-                    name="FlightNumber"
-                    label="Flight Number"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your Flight Number!',
-                        },
-                    ]}
-                >
-                    <Input style={{width: "100%"}}
-                           placeholder="Please input Flight Number"/>
-                </Form.Item>
-                <Form.Item
                     name="FlightID"
                     label="Flight ID"
                     rules={[
@@ -64,10 +53,25 @@ class CustomerCheckin extends Component {
                         },
                     ]}
                 >
-                    <Input style={{width: "100%"}}
+                    <Input
+                        style={{width: "100%"}}
                            placeholder="Please input Flight ID"/>
                 </Form.Item>
 
+                <Form.Item
+                    name="Phone"
+                    label="Phone Number"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Phone Number!',
+                        },
+                    ]}
+                >
+                    <InputNumber
+                        style={{width: "100%"}}
+                        placeholder="Please input Phone Number"/>
+                </Form.Item>
 
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit"

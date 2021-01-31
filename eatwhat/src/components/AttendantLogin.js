@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Form, Input, Button} from "antd";
 import { UserOutlined,  } from "@ant-design/icons";
+import FlightIcon from '@material-ui/icons/Flight';
 import {Link} from "react-router-dom";
 
 class AttendantLogin extends Component {
@@ -23,7 +24,7 @@ class AttendantLogin extends Component {
               ]}
           >
             <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<FlightIcon className="site-form-item-icon" />}
                 placeholder="Flight ID"
             />
           </Form.Item>

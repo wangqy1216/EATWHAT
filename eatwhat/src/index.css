@@ -4,6 +4,7 @@
 @import '~antd/dist/antd.css';
 @import "./styles/CustomerCheckin.css";
 @import "./styles/AttendantLogin.css";
+@import "./styles/ChooseMeal.css";
 
 body {
   margin: 0;
