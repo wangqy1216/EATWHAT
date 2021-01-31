@@ -4,6 +4,11 @@ const OrderSchema = require('./order.model');
 
 const FlightSchema = new Schema({
     flightNumber: String,
+    cellPhones: [
+        {
+            type:String
+        }
+    ],
     // capacity: Number,
     orders: [
         {

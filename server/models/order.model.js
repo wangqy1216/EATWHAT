@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
   type: String,
-  description: String,
+  cellPhone: {
+    type: String,
+    trim: true,
+  },
   seatNumber: String,
   flightNumber: String,
 })

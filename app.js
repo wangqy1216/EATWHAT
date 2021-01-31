@@ -59,12 +59,10 @@ app.get('/customer/checkin', async (req, res) => {
         order: null
       })
     }
-
   }
-
 })
 
-app.get('/attandent/checkin', async (req, res) => {
+app.get('/attendant/checkin', async (req, res) => {
   const phoneNumber = req.query.cid;
   const flightNumber = req.query.fid;
   const user = await User.findOne({ cellPhone: phoneNumber });
@@ -78,38 +76,74 @@ app.get('/attandent/checkin', async (req, res) => {
   } else { // Found User
     if (flight) { // and found flights
       // FIXIT: get all ordr in a particualr flight
-      async () => {
+
+       var completed = flight.orders.length;
+       console.log(completed);
+        
         let ordersArr = [];
         await flight.orders.forEach(async orderId => {
+          // console.log(orderId);
           // ordersArr.push(await Order.findById(orderId))
           let order = await Order.findById(orderId);
-          orderJson = order.toJSON()
-          // console.log(order)
+
           if (order) {
-            console.log(orderJson)
-            ordersArr.push(orderJson)
+            console.log(order);
+            ordersArr.push(order);
+            completed --;
+            console.log(completed);
+            // console.log(ordersArr);
+          
+            if(completed == 0){
+              res.status(200).send(ordersArr);
+            }
           }
-        });
-        console.log(ordersArr)
-        res.status(200).json({
-          message: 'Success',
-          orders: ordersArr
-        })
-      }
-
-
+        }
+        );      
     } else { // no flights info
       res.status(400).json({
         message: 'Error',
         error: 'Flight not found'
       })
-
     }
+  }
+});
 
+app.post('/customer/takeorder', async (req, res ) => {
+  const type = req.query.type;
+  const flightNumber = req.query.fid;
+  const phoneNumber = req.query.cid;
+
+  console.log(type);
+  console.log(flightNumber);
+  console.log(phoneNumber);
+
+  Order.deleteMany({ flightNumber: flightNumber, cellPhone: phoneNumber }, function (err) {
+    if (err) return handleError(err);
+  });
+  User.deleteMany({cellPhone: phoneNumber, flightNumber: flightNumber }, function (err) {
+    if (err) return handleError(err);
+  });
+
+
+  try {
+    const newOrder = new Order({type: type, flightNumber: flightNumber, cellPhone: phoneNumber});
+    let saveOrder_save = await newOrder.save(); //when fail its goes to catch
+    console.log(saveOrder_save); //when success it print.
+
+    const newUser = new User({ cellPhone: phoneNumber, flightNumber: flightNumber, orderId: newOrder._id});
+    let newUser_save = await newUser.save(); //when fail its goes to catch
+    console.log(newUser_save); //when success it print.
+
+    const flight = await Flight.findOne({ flightNumber: flightNumber });
+    flight.orders.push(newOrder); 
+    flight.cellPhones.push(phoneNumber); 
+  } catch (err) {
+    console.log('err' + err);
+    res.status(500).send(err);
   }
 
-})
-
+  res.status(200).send('Success');
+});
 
 app.listen(3000, () => {
   console.log('serve on 3000');
