@@ -26,10 +26,11 @@ app.get('/', (req, res) => {
   res.send('hello EATWHAT');
 });
 
-app.get('/customer/checkin/:cid', async (req, res) => {
-  const phoneNumber = req.params.cid;
-  // const flightNumber = req.query.fid;
-  const user = await User.findOne({ cellPhone: phoneNumber });
+app.get('/customer/checkin', async (req, res) => {
+  const phoneNumber = req.query.cid;
+  // console.log(req.query)
+  const flightNumber = req.query.fid;
+  const user = await User.findOne({ cellPhone: phoneNumber, flightNumber: flightNumber });
   // const flight = await Flight.find({ flightNumber: flightNumber });
 
   if (user == undefined) {
@@ -57,6 +58,52 @@ app.get('/customer/checkin/:cid', async (req, res) => {
         message: "Success",
         order: null
       })
+    }
+
+  }
+
+})
+
+app.get('/attandent/checkin', async (req, res) => {
+  const phoneNumber = req.query.cid;
+  const flightNumber = req.query.fid;
+  const user = await User.findOne({ cellPhone: phoneNumber });
+  const flight = await Flight.findOne({ flightNumber: flightNumber });
+
+  if (user == undefined) {
+    res.status(400).json({
+      message: 'Error',
+      error: 'User not found'
+    });
+  } else { // Found User
+    if (flight) { // and found flights
+      // FIXIT: get all ordr in a particualr flight
+      async () => {
+        let ordersArr = [];
+        await flight.orders.forEach(async orderId => {
+          // ordersArr.push(await Order.findById(orderId))
+          let order = await Order.findById(orderId);
+          orderJson = order.toJSON()
+          // console.log(order)
+          if (order) {
+            console.log(orderJson)
+            ordersArr.push(orderJson)
+          }
+        });
+        console.log(ordersArr)
+        res.status(200).json({
+          message: 'Success',
+          orders: ordersArr
+        })
+      }
+
+
+    } else { // no flights info
+      res.status(400).json({
+        message: 'Error',
+        error: 'Flight not found'
+      })
+
     }
 
   }

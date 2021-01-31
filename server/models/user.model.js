@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     type: String,
     trim: true,
   },
+  flightNumber: String,
   orderId: String
 })
 
