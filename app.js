@@ -7,16 +7,16 @@ const User = require('./server/models/user.model.js');
 
 const dbUrl = 'mongodb+srv://new-user:new-user@cluster0.o28kv.mongodb.net/EATWHAT?retryWrites=true&w=majority';
 mongoose.connect(dbUrl, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-    console.log("Database connected");
+  console.log("Database connected");
 });
 
 
@@ -26,21 +26,41 @@ app.get('/', (req, res) => {
   res.send('hello EATWHAT');
 });
 
-app.get('/user', async (req, res) => {
-  const user = await User.findOne({ cellPhone: req.params.userId });
-  const flight = await Flight.find({ flightNumber: req.params.flightNumber });
-  
-  if(user == undefined){
+app.get('/customer/checkin/:cid', async (req, res) => {
+  const phoneNumber = req.params.cid;
+  // const flightNumber = req.query.fid;
+  const user = await User.findOne({ cellPhone: phoneNumber });
+  // const flight = await Flight.find({ flightNumber: flightNumber });
+
+  if (user == undefined) {
     res.status(400).json({
-      message: 'User Not Found'
+      message: 'Error',
+      error: 'User not found'
     });
-  } else {
-    res.status(400).json({
-      user: user.data.cellPhone,
-      // flight: flight.data.flightNumber
-    });  
+  } else { // Found User
+    if (user.orderId) { // Found order record
+      const order = await Order.findById(user.orderId)
+      if (order === undefined) {
+        res.status(400).json({
+          message: "Error",
+          error: "Order not found"
+        })
+      } else {
+        const orderContent = order.toJSON();
+        res.status(200).json({
+          message: "Success",
+          order: orderContent
+        })
+      }
+    } else { // Take order
+      res.status(200).json({
+        message: "Success",
+        order: null
+      })
+    }
+
   }
-  
+
 })
 
 
