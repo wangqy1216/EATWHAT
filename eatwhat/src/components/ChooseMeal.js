@@ -16,7 +16,7 @@ function ChooseMeal(props) {
         const {Phone, FlightID} = localStorage;
         const cors = 'https://cors-anywhere.herokuapp.com/';
         const url = cors+BASE_URL + '/customer/takeorder/?cid='+Phone+'&fid='+FlightID+'&type='+type;
-
+        console.log(url);
         const opt = {
             method: 'POST',
             url: url,

@@ -32,7 +32,7 @@ class Home extends Component {
                             hoverable
                             cover={<img alt="customer"  width="100px" height="250" src={customer}/>}
                         >
-                            <Meta title="CustomerCheckin" description="If you are a customer, click here" />
+                            <Meta title="Customer" description="If you are a customer, you can order a special meal based on your religious, medical, dietary or children" />
                         </Card></Link>
                     </Col>
                     <Col span={5}>
@@ -41,7 +41,7 @@ class Home extends Component {
                             hoverable
                             cover={<img alt="attendant" width="100" height="250" src={attendant}/>}
                         >
-                            <Meta title="attendant" description="If you are a flight attendant, click" />
+                            <Meta title="Attendant" description="If you are a flight attendant, you can see all order or notify all passengers to order a special meal" />
                         </Card></Link>
                         </Col>
 
