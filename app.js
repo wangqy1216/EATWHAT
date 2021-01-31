@@ -6,8 +6,9 @@ const Flight = require('./server/models/flight.model.js');
 const Order = require('./server/models/order.model.js');
 const User = require('./server/models/user.model.js');
 
-const accountSid = 'AC528da9590676084d47a3d2bfeb58a70a';
-const authToken = 'b9bd2f92719344f0d187f67e4a58487e';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+console.log(accountSid, authToken)
 const client = require('twilio')(accountSid, authToken);
 
 const dbUrl = 'mongodb+srv://new-user:new-user@cluster0.o28kv.mongodb.net/EATWHAT?retryWrites=true&w=majority';
