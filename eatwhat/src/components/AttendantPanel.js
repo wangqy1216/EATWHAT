@@ -125,7 +125,7 @@ class AttendantPanel extends Component {
         const paddingStyle = {padding: "4px", textAlign:"right"};
         const { loading } = this.state;
         rows[1][0].tooltip = "Change"
-        console.log(rows[1][0]);
+        console.log(rows[1]);
         return (
             <div>
                 <h1>Admin Panel</h1>
