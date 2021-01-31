@@ -5,6 +5,7 @@
 @import "./styles/CustomerCheckin.css";
 @import "./styles/AttendantLogin.css";
 @import "./styles/ChooseMeal.css";
+@import "./styles/Confirm.css";
 
 body {
   margin: 0;
