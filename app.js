@@ -1,9 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const axios = require('axios');
 
 const Flight = require('./server/models/flight.model.js');
 const Order = require('./server/models/order.model.js');
 const User = require('./server/models/user.model.js');
+
+const accountSid = 'AC528da9590676084d47a3d2bfeb58a70a';
+const authToken = 'b9bd2f92719344f0d187f67e4a58487e';
+const client = require('twilio')(accountSid, authToken);
 
 const dbUrl = 'mongodb+srv://new-user:new-user@cluster0.o28kv.mongodb.net/EATWHAT?retryWrites=true&w=majority';
 mongoose.connect(dbUrl, {
@@ -132,6 +137,11 @@ app.post('/customer/takeorder', async (req, res) => {
 
     const newUser = new User({ cellPhone: phoneNumber, flightNumber: flightNumber, orderId: newOrder._id });
     orderId = newOrder._id;
+
+    client.messages.create({ body: 'Your order Number is ' + orderId + ' Thanks.', messagingServiceSid: 'MG02a34f47806e26293fe33fc6d9d705f0', to: phoneNumber })
+      .then(message => console.log(message.sid))
+      .done();
+
     let newUser_save = await newUser.save(); //when fail its goes to catch
     console.log(newUser_save); //when success it print.
 
@@ -149,6 +159,37 @@ app.post('/customer/takeorder', async (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('serve on 3000');
-})
+
+app.get('/flights', async (req, res) => {
+  const flightNumber = req.query.fid;
+  let isServing = false;
+  await axios.get('https://flights-engine.herokuapp.com/flights?date=2020-01-01')
+    .then(response => {
+      response.data.forEach(flight => {
+        if (flight.flightNumber === flightNumber) {
+          if (flight.distance > 1000) {
+            isServing = true
+          }
+        }
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  if (isServing) {
+    const flight = await Flight.findOne({ flightNumber: flightNumber });
+    const cellArr = flight.cellPhones
+
+    cellArr.forEach(phNum => {
+      client.messages.create({ body: 'You can order meal on our app "EATWHAT"', messagingServiceSid: 'MG02a34f47806e26293fe33fc6d9d705f0', to: phNum })
+        .then(message => console.log(message.sid))
+        .done();
+    })
+  }
+  res.send("Success")
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Our app is running on port ${PORT}`);
+});
